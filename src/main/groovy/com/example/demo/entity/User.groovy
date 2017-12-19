@@ -1,15 +1,12 @@
 package com.example.demo.entity
 
-import javax.persistence.Column
-import javax.persistence.Enumerated
+import lombok.Data
+import org.springframework.format.annotation.DateTimeFormat
+
+import javax.persistence.*
 
 import static javax.persistence.EnumType.STRING
 import static javax.persistence.GenerationType.AUTO
-
-import lombok.Data
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
 
 /**
  * Created by whilemouse on 17. 12. 19.
@@ -34,5 +31,13 @@ class User {
     @Column(nullable = false)
     @Enumerated(STRING)
     Role role
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    Date createdAt;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    Date modifiedAt;
 
 }
