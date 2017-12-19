@@ -13,10 +13,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import javax.transaction.Transactional
 
 @SpringBootApplication
-class DemoApplication {
+class Application {
 
 	static void main(String[] args) {
-		SpringApplication.run DemoApplication, args
+		SpringApplication.run Application, args
 	}
 
 	@Autowired
@@ -26,12 +26,17 @@ class DemoApplication {
 	@Transactional
 	InitializingBean localInitializingBean() {
 		return {
-			User user = new User()
-			user.username = "test"
-			user.password = new BCryptPasswordEncoder().encode("test")
-			user.role = Role.USER
-			user.email = "test@test.com"
-			userRepository.save(user)
+			User findUser = userRepository.findByUsername("test")
+
+			if(findUser == null) {
+				User user = new User()
+				user.username = "test"
+				user.password = new BCryptPasswordEncoder().encode("test")
+				user.role = Role.USER
+				user.email = "test@test.com"
+				userRepository.save(user)
+			}
+
 		}
 	}
 

@@ -1,6 +1,7 @@
 package com.example.demo.entity
 
 import lombok.Data
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import org.springframework.format.annotation.DateTimeFormat
 
 import javax.persistence.*
@@ -12,6 +13,7 @@ import static javax.persistence.GenerationType.AUTO
  * Created by whilemouse on 17. 12. 19.
  */
 @Data
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 class User {
 
