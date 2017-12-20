@@ -56,5 +56,4 @@ class User {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     Date lastModifiedDate
 
-
 }
