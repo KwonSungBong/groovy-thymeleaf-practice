@@ -1,18 +1,22 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
     <title>Index</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/index.css}" />
+    <link rel="stylesheet" href="/assets/bower/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/index.css}" />
     <style>
     </style>
 </head>
 <body>
 <div id="index">
+    <h4 th:text="#{app.title}"/>
     <h4>
         <b>index <span th:text="${data}">${data}</span></b>
     </h4>
 </div>
-<script th:src="@{/index.js}"></script>
+<script src="/assets/bower/jquery/jquery.js"></script>
+<script src="/assets/bower/bootstrap/dist/js/bootstrap.js"></script>
+<script th:src="@{/assets/js/index.js}"></script>
 </body>
 </html>

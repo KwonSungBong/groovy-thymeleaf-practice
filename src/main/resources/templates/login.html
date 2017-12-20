@@ -11,6 +11,17 @@
     <h4>
         login
     </h4>
+    <div>
+        <form th:action='@{/login}' method='POST' id='loginForm'>
+            <fieldset>
+                <label for="username">username</label>
+                <input type="text" name="username" id="username" />
+                <label for="password">password</label>
+                <input type="text" name="password" id="password" />
+                <button type="submit">login</button>
+            </fieldset>
+        </form>
+    </div>
 </div>
 </body>
 </html>

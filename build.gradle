@@ -10,6 +10,18 @@ buildscript {
 	}
 }
 
+plugins {
+	id 'com.craigburke.bower-installer' version '2.5.1'
+	id "org.flywaydb.flyway" version "4.2.0"
+}
+
+bower {
+	installBase = 'src/main/resources/static/assets/bower'
+	'bootstrap'('3.3.7'){
+		source '**'
+	}
+}
+
 apply plugin: 'groovy'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
