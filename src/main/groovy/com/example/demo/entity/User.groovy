@@ -1,6 +1,10 @@
 package com.example.demo.entity
 
 import lombok.Data
+import org.springframework.data.annotation.CreatedBy
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedBy
+import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import org.springframework.format.annotation.DateTimeFormat
 
@@ -34,12 +38,23 @@ class User {
     @Enumerated(STRING)
     Role role
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    Date createdAt;
+    @CreatedBy
+    @OneToOne
+    User createdUser
 
+    @LastModifiedBy
+    @OneToOne
+    User lastModifiedBy
+
+    @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    Date modifiedAt;
+    Date createdDate
+
+    @LastModifiedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    Date lastModifiedDate
+
 
 }
