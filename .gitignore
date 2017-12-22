@@ -27,3 +27,4 @@ nbdist/
 
 ################
 bower/
+node_modules/
