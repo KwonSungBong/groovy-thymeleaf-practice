@@ -38,6 +38,18 @@ class User {
     @Enumerated(STRING)
     Role role
 
+    @Column(nullable = false)
+    Boolean enabled = true
+
+    @Column(nullable = false)
+    Boolean accountNonExpired = true
+
+    @Column(nullable = false)
+    Boolean credentialsNonExpired = true
+
+    @Column(nullable = false)
+    Boolean accountNonLocked = true
+
     @CreatedBy
     @OneToOne
     User createdUser

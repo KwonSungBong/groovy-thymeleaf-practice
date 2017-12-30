@@ -17,7 +17,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    UserDetailsService userDetailsService
+    BCryptPasswordEncoder passwordEncoder
+
+    @Autowired
+    UserDetailsService userDetailsServiceImpl
 
     @Override
     void configure(HttpSecurity http) throws Exception {
@@ -35,17 +38,17 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
     }
 
-//    @Autowired
-//    void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth
-//                .userDetailsService(userDetailsService)
-//                .passwordEncoder(new BCryptPasswordEncoder())
-//    }
-
     @Autowired
     configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("user")
-                .password("password").roles("USER")
+        auth
+                .userDetailsService(userDetailsServiceImpl)
+                .passwordEncoder(passwordEncoder)
     }
+
+//    @Autowired
+//    configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.inMemoryAuthentication().withUser("user")
+//                .password("password").roles("USER")
+//    }
 
 }

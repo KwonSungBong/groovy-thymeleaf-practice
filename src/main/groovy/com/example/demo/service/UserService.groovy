@@ -1,16 +1,14 @@
 package com.example.demo.service
 
-import com.example.demo.repository.UserRepository
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Service
+import com.example.demo.entity.User
 
 /**
- * Created by whilemouse on 17. 12. 19.
+ * Created by ksb on 2017. 12. 30..
  */
-@Service
-class UserService {
+interface UserService {
 
-    @Autowired
-    UserRepository userRepository
+    User getByUsername(String username)
+    User getByEmail(String email)
+    User getCurrentUser()
 
 }

@@ -23,7 +23,8 @@ class LoginController {
     ModelAndView login(@RequestParam Optional<String> error, HttpServletRequest request){
         ModelAndView modelAndView = new ModelAndView('login')
         if(error.isPresent()){
-            modelAndView.addObject('message', localeService.getMessage('login.error', request))
+//            modelAndView.addObject('message', localeService.getMessage('login.error', request))
+            modelAndView.addObject('message', "error")
         }
         modelAndView
     }

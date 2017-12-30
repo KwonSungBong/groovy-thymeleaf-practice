@@ -20,6 +20,9 @@ class Application {
 	}
 
 	@Autowired
+	BCryptPasswordEncoder passwordEncoder
+
+	@Autowired
 	UserRepository userRepository
 
 	@Bean
@@ -31,8 +34,8 @@ class Application {
 			if(findUser == null) {
 				User user = new User()
 				user.username = "test"
-				user.password = new BCryptPasswordEncoder().encode("test")
-				user.role = Role.USER
+				user.password = passwordEncoder.encode("test")
+				user.role = Role.ROLE_USER
 				user.email = "test@test.com"
 				userRepository.save(user)
 			}

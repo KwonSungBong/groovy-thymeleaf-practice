@@ -1,4 +1,4 @@
-package com.example.demo.service
+package com.example.demo.service.impl
 
 import com.example.demo.entity.User
 import com.example.demo.repository.UserRepository
@@ -20,7 +20,7 @@ class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     org.springframework.security.core.userdetails.User loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.getByUsername(username)
+        User user = userRepository.findByUsername(username)
         Set<GrantedAuthority> grantedAuthorities = [] as Set
         grantedAuthorities << new SimpleGrantedAuthority(user.role.toString())
         new org.springframework.security.core.userdetails.User(user.username, user.password, user.enabled, user.accountNonExpired, user.credentialsNonExpired, user.accountNonLocked, grantedAuthorities)
