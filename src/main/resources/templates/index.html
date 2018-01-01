@@ -1,19 +1,116 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8" />
     <title>Index</title>
     <link rel="stylesheet" href="/assets/bower/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/index.css}" />
-    <style>
-    </style>
 </head>
 <body>
 <div id="index">
     <h4 th:text="#{app.title}"/>
-    <h4>
-        <b>index <span th:text="${data}">${data}</span></b>
-    </h4>
+    <div sec:authorize="isAnonymous()">
+        <form class="form-inline" th:action='@{/login}' method='POST'>
+            <div class="form-group">
+                <label class="sr-only" for="username" th:text="#{app.username}" />
+                <input type="text" name="username" class="form-control" id="username" placeholder="Username" />
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="password" th:text="#{app.password}" />
+                <input type="password" name="password" class="form-control" id="password" placeholder="Password" />
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="remember-me" />
+                    <span th:text="#{app.rememberMe}" />
+                </label>
+            </div>
+            <button type="submit" class="btn btn-default" th:text="#{app.login}" />
+        </form>
+    </div>
+    <div sec:authorize="isAuthenticated()">
+        <form class="form-inline" th:action='@{/logout}' method='GET'>
+            <div class="form-group">
+                <span th:text="${#authentication.name}" />
+            </div>
+            <div class="form-group">
+                <span th:text="${#authentication.authorities}" />
+            </div>
+            <div class="form-group">
+                <span sec:authorize="isRememberMe()" th:text="#{app.isRememberMe}" />
+            </div>
+            <button type="submit" class="btn btn-default" th:text="#{app.logout}" />
+        </form>
+    </div>
+    <br />
+</div>
+<ul class="nav nav-tabs">
+    <li role="presentation"
+        th:each="board : ${boardList}"
+        th:classappend="${board.id == activeBoardId} ? 'active' : ''">
+        <a th:href="@{/(activeBoardId=${board.id})}" th:text="${board.name}" />
+    </li>
+</ul>
+<div class="container-fluid">
+    <form class="navbar-form text-center" role="search" action="/" method="get">
+        <div class="form-group">
+            <input name="activeBoardId" type="hidden" th:value="${activeBoardId}" />
+            <input name="searchWord" type="text" th:value="${searchWord}" class="form-control" placeholder="Search" />
+        </div>
+        <button type="submit" class="btn btn-default">검색</button>
+    </form>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <th>id</th>
+                <th>name</th>
+                <th>content</th>
+                <th>createdUser</th>
+                <th>createdDate</th>
+                <th>lastModifiedUser</th>
+                <th>lastModifiedDate</th>
+            </thead>
+            <tbody>
+                <tr th:each="post : ${postPage.content}"
+                    th:onclick="'window.location.href = \'' + @{/detail(activeBoardId=${activeBoardId},postId=${post.id})} + '\''">
+                    <td class="pointer" th:text="${post.id}"></td>
+                    <td class="pointer" th:text="${post.name}"></td>
+                    <td class="pointer" th:text="${post.content}"></td>
+                    <td class="pointer" th:text="${post.createdUser?.username}"></td>
+                    <td class="pointer" th:text="${post.createdDate}"></td>
+                    <td class="pointer" th:text="${post.lastModifiedUser?.username}"></td>
+                    <td class="pointer" th:text="${post.lastModifiedDate}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <nav class="text-center">
+        <ul class="pagination">
+            <li>
+                <a th:href="@{/(activeBoardId=${activeBoardId},searchWord=${searchWord},page=${0})}"
+                   aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <th:block th:if="${postPage.totalPages > 0}"
+                      th:each="i: ${#numbers.sequence(0, postPage.totalPages - 1)}">
+                <li th:classappend="${postPage.number == i} ? 'active' : ''">
+                    <a th:href="@{/(activeBoardId=${activeBoardId},searchWord=${searchWord},page=${i})}"
+                       th:text="${i + 1}" />
+                </li>
+            </th:block>
+            <li>
+                <a th:href="@{/(activeBoardId=${activeBoardId},searchWord=${searchWord},page=${postPage.totalPages - 1})}"
+                   aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <button sec:authorize="isAuthenticated()" type="button" class="btn btn-primary center-block"
+            th:onclick="'window.location.href = \'' + @{/form(activeBoardId=${activeBoardId})} + '\''">
+        글쓰기
+    </button>
 </div>
 <script src="/assets/bower/jquery/jquery.js"></script>
 <script src="/assets/bower/bootstrap/dist/js/bootstrap.js"></script>

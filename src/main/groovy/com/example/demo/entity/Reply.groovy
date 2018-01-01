@@ -8,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import org.springframework.format.annotation.DateTimeFormat
 
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EntityListeners
 import javax.persistence.GeneratedValue
@@ -17,6 +18,7 @@ import javax.persistence.ManyToOne
 import javax.persistence.OneToOne
 import javax.persistence.Temporal
 import javax.persistence.TemporalType
+import javax.validation.constraints.Size
 
 import static javax.persistence.GenerationType.AUTO
 
@@ -32,11 +34,15 @@ class Reply {
     @GeneratedValue(strategy = AUTO)
     Long id
 
+    @Size(min=1, max=255)
     String content;
 
     @ManyToOne
     @JoinColumn(name="post_id")
-    private Post post
+    Post post
+
+    @Column(nullable = false)
+    boolean enabled = true;
 
     @CreatedBy
     @OneToOne
@@ -44,7 +50,7 @@ class Reply {
 
     @LastModifiedBy
     @OneToOne
-    User lastModifiedBy
+    User lastModifiedUser
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)

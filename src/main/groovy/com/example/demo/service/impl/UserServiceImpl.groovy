@@ -17,6 +17,10 @@ class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository
 
+    @Override
+    void save(User user) {
+        userRepository.save(user)
+    }
 
     User getByUsername(String username) {
         userRepository.findByUsername(username)
@@ -27,8 +31,9 @@ class UserServiceImpl implements UserService {
     }
 
     User getCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication()
-        String username = auth.getName()
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication()
+        if(authentication == null || !authentication.isAuthenticated()) return null
+        String username = authentication.getName()
         userRepository.findByUsername(username)
     }
 

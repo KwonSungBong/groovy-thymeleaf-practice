@@ -56,7 +56,7 @@ class User {
 
     @LastModifiedBy
     @OneToOne
-    User lastModifiedBy
+    User lastModifiedUser
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)

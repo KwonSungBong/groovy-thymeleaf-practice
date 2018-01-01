@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>Detail</title>
+    <link rel="stylesheet" href="/assets/bower/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/index.css}" />
+</head>
+<body>
+<div id="index">
+    <h4 th:text="#{app.title}"/>
+    <div sec:authorize="isAnonymous()">
+        <form class="form-inline" th:action='@{/login}' method='POST'>
+            <div class="form-group">
+                <label class="sr-only" for="username">username</label>
+                <input type="text" name="username" class="form-control" id="username" placeholder="Username" />
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="password">Password</label>
+                <input type="password" name="password" class="form-control" id="password" placeholder="Password" />
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" /> Remember me
+                </label>
+            </div>
+            <button type="submit" class="btn btn-default">로그인</button>
+        </form>
+    </div>
+    <div sec:authorize="isAuthenticated()">
+        <form class="form-inline" th:action='@{/logout}' method='GET'>
+            <div class="form-group">
+                <span th:text="${#authentication.name}" />
+            </div>
+            <div class="form-group">
+                <span th:text="${#authentication.authorities}" />
+            </div>
+            <button type="submit" class="btn btn-default">로그아웃</button>
+        </form>
+    </div>
+    <br />
+</div>
+<ul class="nav nav-tabs">
+    <li role="presentation"
+        th:each="board : ${boardList}"
+        th:classappend="${board.id == activeBoardId} ? 'active' : ''">
+        <a th:href="@{/(activeBoardId=${board.id})}" th:text="${board.name}" />
+    </li>
+</ul>
+<div class="container-fluid">
+    <div class="well">
+        <div class="form-group">
+            <label for="id">번호</label>
+            <input readonly="readonly" type="text" class="form-control" id="id" placeholder="번호가 없습니다"
+                   th:value="${post.id}"/>
+        </div>
+        <div class="form-group">
+            <label for="createdUser">작성자</label>
+            <input readonly="readonly" type="text" class="form-control" id="createdUser" placeholder="작성자가 없습니다"
+                   th:value="${post.createdUser?.username}"/>
+        </div>
+        <div class="form-group">
+            <label for="createdDate">작성일자</label>
+            <input readonly="readonly" type="text" class="form-control" id="createdDate" placeholder="작성일자가 없습니다"
+                   th:value="${post.createdDate}"/>
+        </div>
+        <div class="form-group">
+            <label for="name">제목</label>
+            <input readonly="readonly" type="text" class="form-control" id="name" placeholder="제목이 없습니다"
+                   th:value="${post.name}"/>
+        </div>
+        <div class="form-group">
+            <label for="content">내용</label>
+            <textarea readonly="readonly" class="form-control" id="content" rows="3" placeholder="내용이 없습니다"
+                      th:text="${post.content}"></textarea>
+        </div>
+        <div class="btn-group">
+            <form sec:authorize="isAuthenticated()"
+                  th:if="${#authentication.name == post.createdUser?.username}"
+                  class="form-inline" action="/form" method="get">
+                <input type="hidden" name="postId" th:value="${post.id}" />
+                <input type="hidden" name="activeBoardId" th:value="${activeBoardId}" />
+                <button type="submit" class="btn btn-primary">수정</button>
+            </form>
+            <form sec:authorize="isAuthenticated()"
+                  th:if="${#authentication.name == post.createdUser?.username}"
+                  class="form-inline" action="/delete" method="post">
+                <input type="hidden" name="postId" th:value="${post.id}" />
+                <input type="hidden" name="activeBoardId" th:value="${activeBoardId}" />
+                <button type="submit" class="btn btn-danger">삭제</button>
+            </form>
+            <button type="button" class="btn btn-default"
+                    th:onclick="'window.location.href = \'' + @{/(activeBoardId=${activeBoardId})} + '\''">
+                취소
+            </button>
+        </div>
+    </div>
+    <div class="well">
+        <form sec:authorize="isAuthenticated()"
+              action="/saveReply" method="post">
+            <div class="form-group">
+                <label for="reply">답글</label>
+                <input type="text" name="content" class="form-control" id="reply" placeholder="답글을 입력하세요" />
+            </div>
+            <input type="hidden" name="activeBoardId" th:value="${activeBoardId}" />
+            <input type="hidden" name="postId" th:value="${post.id}" />
+            <input type="hidden" name="post.id" th:value="${post.id}" />
+            <button type="submit" class="btn btn-primary">작성</button>
+        </form>
+        <br/>
+        <div class="list-group">
+            <div th:each="reply : ${replyList}" class="list-group-item">
+                <h4 class="list-group-item-heading" th:text="${reply.createdUser?.username}" />
+                <p class="list-group-item-text" th:text="${reply.content}" />
+                <form sec:authorize="isAuthenticated()"
+                      th:if="${#authentication.name == reply.createdUser?.username}"
+                      class="form-inline" action="/deleteReply" method="post">
+                    <input type="hidden" name="activeBoardId" th:value="${activeBoardId}" />
+                    <input type="hidden" name="postId" th:value="${post.id}" />
+                    <input type="hidden" name="replyId" th:value="${reply.id}" />
+                    <button type="submit" class="btn btn-danger">삭제</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/bower/jquery/jquery.js"></script>
+<script src="/assets/bower/bootstrap/dist/js/bootstrap.js"></script>
+<script th:src="@{/assets/js/index.js}"></script>
+</body>
+</html>

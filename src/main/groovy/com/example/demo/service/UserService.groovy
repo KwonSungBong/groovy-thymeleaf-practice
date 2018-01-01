@@ -7,6 +7,7 @@ import com.example.demo.entity.User
  */
 interface UserService {
 
+    void save(User user)
     User getByUsername(String username)
     User getByEmail(String email)
     User getCurrentUser()
